@@ -1,5 +1,5 @@
-# mapService
-使用百度地图API和datatables扩展
+# editService
+使用datatables扩展
 数据库后台的修改界面
 
 ## 调试
