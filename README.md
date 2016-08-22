@@ -5,9 +5,9 @@
 配置editor/php/config.php  中的数据库信息
 
 ```
-  "user" => "",       // Database user name
-	"pass" => "",       // Database password
-	"host" => "",       // Database host
-	"port" => "",       // Database connection port (can be left empty for default)
-	"db"   => "",       // Database name
+"user" => "",       // Database user name
+"pass" => "",       // Database password
+"host" => "",       // Database host
+"port" => "",       // Database connection port (can be left empty for default)
+"db"   => "",       // Database name
 ```
