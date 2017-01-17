@@ -14,8 +14,7 @@ use
     // var_dump($editDb);
     // var_dump($sql_details);
     
-    // Editor::inst( $editDb, '0test' )
-    Editor::inst( $editDb, 'aijiacms_ceshimap' )
+    Editor::inst( $editDb, "aijiacms_ceshimap" )
     ->fields(
         Field::inst( 'id' )->validator( 'Validate::notEmpty' ),
         Field::inst( 'province' )->validator( 'Validate::notEmpty' ),
@@ -30,7 +29,9 @@ use
             ->setFormatter( 'Format::ifEmpty', null ),
         Field::inst( 'sellingPrice' )
             ->validator( 'Validate::numeric' )
-            ->setFormatter( 'Format::ifEmpty', null )
+            ->setFormatter( 'Format::ifEmpty', null ),
+        Field::inst( 'updateDate' )
+
     )
     ->process( $_POST )
     ->json();

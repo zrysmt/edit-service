@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>修改房源信息</title>
+    <title>21厂房网-修改厂房信息</title>
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.0/css/select.dataTables.min.css">
-    <link rel="stylesheet" href="editor/editor.dataTables.min.css">
+    <link rel="stylesheet" href="http://www.21changfang.com/file/script/editor/editor.dataTables.min.css">
     <style type="text/css">
     body {
         margin: 0;
@@ -16,43 +16,36 @@
         font-family: "Microsoft YaHei"
     }
     
-    #top_bar {
+    #edit-top-bar {
         z-index: 999;
-        padding: 10px;
+        padding-top: 10px;
         color: #fff;
+        height: 40px;
         font-family: "Microsoft YaHei";
         font-size: 16px;
         background-color: #008B00;
     }
     
-    #gotoCeshimap {
+    #menus-bar{
         float: right;
-        margin-right: 20px;
-        margin-top: -9px;
+        margin-right: 16px;
+        display: inline-block;
+    }
+    #menus-bar span{
+        margin-left: 16px;
+        margin-top: -9px;   
         padding: 9px;
     }
-    
+    #menus-bar span:hover{
+        background-color: #00a000;
+    }
+    .menus-bar-click{
+        background-color: #00a000;
+    }
     #gotoCeshimap a,
     #addPage a {
         color: #fff;
         text-decoration: none;
-    }
-    
-    #addPage {
-        float: right;
-        margin-right: 40px;
-        margin-top: -9px;
-        padding: 9px;
-    }
-    
-    #addPage:hover,
-    #gotoCeshimap:hover {
-        background-color: #00a000;
-    }
-    
-    #back {
-        float: right;
-        margin-right: 20px;
     }
     
     #back a {
@@ -87,11 +80,14 @@
 </head>
 
 <body>
-    <div id="top_bar">
+    <div id="edit-top-bar">
         <span>&nbsp&nbsp修改厂房信息</span>
-        <span id="back"><a href="http://www.21changfang.com/">返回首页</a></span>
-        <span id="addPage"><a href="http://www.21changfang.com/ceshimap/add.php" target="blank">添加厂房</a> </span>
-        <span id="gotoCeshimap"><a href="http://www.21changfang.com/ceshimap/" target="blank">查看地图</a> </span>
+        <div id="menus-bar">
+            <span id="gotoCeshimap"><a href="http://www.21changfang.com/ceshimap/" target="blank">查看地图</a> </span>
+            <span id="addPage"><a href="http://www.21changfang.com/ceshimap/add.php" target="blank">添加厂房</a> </span>
+            <span id="editPage" class="menus-bar-click">修改房源</span>
+            <span id="back"><a href="http://www.21changfang.com/">返回首页</a></span>
+        </div>
     </div>
     <div class='maintenance'>
         <table id="myTable" class="display">
@@ -100,10 +96,12 @@
     <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <!-- DataTables -->
-    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.0/js/dataTables.select.min.js"></script>
-    <script type="text/javascript" src="editor/dataTables.editor.js"></script>
+    <script type="text/javascript" src="http://www.21changfang.com/file/script/editor/dataTables.editor.min.js"></script>
+    <script src="http://www.21changfang.com/file/script/myCommon.js"></script>
+
     <script type="text/javascript">
     var editor;
     $(document).ready(function() {
@@ -172,6 +170,9 @@
             title: "价格",
             data: "sellingPrice",
             editField: "sellingPrice"
+        }, {
+            title: "修改时间",
+            data: "updateDate"
         }];
 
         editor = new $.fn.dataTable.Editor({
@@ -207,11 +208,15 @@
         $('#myTable').on('click', 'tbody td:not(:first-child)', function(e) {
             editor.inline(this);
         });
+        //编辑时修改时间字段更新
+        editor.on('preSubmit', function(e, json, data) {
+            var time = formatDateTime();
+            for (var rId in json.data) {
+                json.data[rId].updateDate = time;
+            }
+        });
         var myTbl = $('#myTable').DataTable({
             ajax: "editDB.php",
-            //当处理大数据时，延迟渲染数据，有效提高Datatables处理能力
-            deferRender: true,
-            // destory:true,
             language: {
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
@@ -257,8 +262,7 @@
             }]
         });
 
-        myTbl.select();//官网上例子没这个是错误的
-        // myTbl.ajax.reload();
+        myTbl.select();//官网上没这个是错误的
     });
     </script>
 </body>
